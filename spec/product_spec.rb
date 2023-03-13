@@ -43,11 +43,11 @@ RSpec.describe Product, type: :model do
       expect(Product.new(params)).to_not be_valid
     end
 
-    it "is not valid without a quantity" do
+    it "is not valid without a category" do
       params = {
         name: 'plant',
         price_cents: 9000,
-        category: @category
+        quantity: 5
       }
       expect(Product.new(params)).to_not be_valid
     end
