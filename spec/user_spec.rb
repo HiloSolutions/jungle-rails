@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  describe 'Validations' do
+  describe 'Validation Specs' do
     it "is valid with valid attributes" do
       params = {
         first_name:'Yennefer',
@@ -57,6 +57,39 @@ RSpec.describe User, type: :model do
         expect(User.new(params)).to_not be_valid
     end
 
+    it "is not valid when first_name is empty" do
+      params = {
+        first_name:'',
+        last_name:'Elizabeth',
+        email: 'cat@cat',
+        password:'paw',
+        password_confirmation:''
+        }
+        expect(User.new(params)).to_not be_valid
+    end
+
+    it "is not valid when last_name is empty" do
+      params = {
+        first_name:'Yennefer',
+        last_name:'',
+        email: 'cat@cat',
+        password:'paw',
+        password_confirmation:''
+        }
+        expect(User.new(params)).to_not be_valid
+    end
+
+    it "is not valid when email is empty" do
+      params = {
+        first_name:'Yennefer',
+        last_name:'Elizabeth',
+        email: '',
+        password:'paw',
+        password_confirmation:''
+        }
+        expect(User.new(params)).to_not be_valid
+    end
+
     it "emails must not match an existing user in the database" do
       params = {
         first_name:'Yennefer',
@@ -65,13 +98,21 @@ RSpec.describe User, type: :model do
         password:'paw',
         password_confirmation:'paw'
         }
-      User.create(params)
-      newUser = User.create(params)
-      
+
+        user = User.new(params)
+        user.save
+
+        duplicate_user = User.new(params)
         
-        expect(newUser).to_not be_valid
+        
+        puts 'test'
+        puts user
+        puts 'test'
+        expect(duplicate_user.save).to be false
+
     end
 
+  
     
   end
 end
