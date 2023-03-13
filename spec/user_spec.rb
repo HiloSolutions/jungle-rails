@@ -76,6 +76,7 @@ RSpec.describe User, type: :model do
         password:'paw',
         password_confirmation:''
         }
+
         expect(User.new(params)).to_not be_valid
     end
 
@@ -103,16 +104,37 @@ RSpec.describe User, type: :model do
         user.save
 
         duplicate_user = User.new(params)
-        
-        
-        puts 'test'
-        puts user
-        puts 'test'
         expect(duplicate_user.save).to be false
 
+    end
+    it "password length < 3 will not be valid" do
+      params = {
+        first_name:'Yennefer',
+        last_name:'Elizabeth',
+        email: 'cat@cat',
+        password:'paw',
+        password_confirmation:''
+        }
+
+        user = User.new(params)
+        puts 'test'
+        puts user.password
+        expect(user.password.length).to be >= 3
     end
 
   
     
   end
+end
+
+RSpec.describe User, type: :model do
+
+  describe 'Validations' do
+    # validation examples here
+  end
+
+  describe '.authenticate_with_credentials' do
+    # examples for this class method here
+  end
+
 end
