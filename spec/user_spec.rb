@@ -113,28 +113,66 @@ RSpec.describe User, type: :model do
         last_name:'Elizabeth',
         email: 'cat@cat',
         password:'paw',
-        password_confirmation:''
+        password_confirmation:'paw'
         }
 
         user = User.new(params)
-        puts 'test'
-        puts user.password
         expect(user.password.length).to be >= 3
     end
 
   
     
   end
-end
-
-RSpec.describe User, type: :model do
-
-  describe 'Validations' do
-    # validation examples here
-  end
-
   describe '.authenticate_with_credentials' do
-    # examples for this class method here
+    it "checks the login and returns the authenticated user" do
+      params = {
+        first_name:'Yennefer',
+        last_name:'Elizabeth',
+        email: 'cat@cat',
+        password:'paw',
+        password_confirmation:'paw'
+        }
+      user = User.create(params)
+  
+      authenticated_user = User.authenticate_with_credentials(user.email, user.password_confirmation)
+      expect(authenticated_user).to eq(user)
+    end
+    it "checks the login and returns nill if the login does not validate" do
+      params = {
+        first_name:'Yennefer',
+        last_name:'Elizabeth',
+        email: 'cat@cat',
+        password:'paw',
+        password_confirmation:'paw'
+        }
+      user = User.create(params)
+      authenticated_user = User.authenticate_with_credentials("paw@paw", "paw")
+      expect(authenticated_user).to eq(nil)
+    end
+    it "checks the login and returns authenticated user regardless of capitaliztion" do
+      params = {
+        first_name:'Yennefer',
+        last_name:'Elizabeth',
+        email: 'cat@cat',
+        password:'paw',
+        password_confirmation:'paw'
+        }
+      user = User.create(params)
+      authenticated_user = User.authenticate_with_credentials("CAT@CAT", "paw")
+      expect(authenticated_user).to eq(user)
+    end
+    it "checks the login and returns authenticated user regardless of TRAILING WHITESPACE" do
+      params = {
+        first_name:'Yennefer',
+        last_name:'Elizabeth',
+        email: 'cat@cat',
+        password:'paw',
+        password_confirmation:'paw'
+        }
+      user = User.create(params)
+      authenticated_user = User.authenticate_with_credentials(" cat@cat ", "paw")
+      expect(authenticated_user).to eq(user)
+    end
   end
-
 end
+
